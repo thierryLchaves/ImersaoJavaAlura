@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
@@ -20,18 +21,24 @@ public class App {
         //Extrarir somente os dados interessantes (Titulo, Imagem e classificação) "parsear os dados"
         var parser = new JsonParser();
         List<Map<String, String>> ListaDeFilme = parser.parse(body);
-  
+       
+        
+        var diretorio = new File("saida/");
+        diretorio.mkdir();
+        
         //Exibir e manipular os dados conforme desejado. 
-     
-      for (Map<String,String> filme : ListaDeFilme) {
-          
+      
+          var geradora = new GeradoraDeFigurinhas();
+          for (int index = 0; index < 5;  index++) {
+            var filme = ListaDeFilme.get(index);
+
             String urlImagem = filme.get("image");
             String titulo = filme.get("title");
 
             InputStream inputStream = new URL(urlImagem).openStream();
-            String nomeArquivo = titulo+".png";
+            String nomeArquivo = diretorio+titulo+".png";
 
-            var geradora = new GeradoraDeFigurinhas();
+
             geradora.cria(inputStream, nomeArquivo);
 
             //impressão de dados com decoração \u001b declaração inicial [1m valor ou conjução desejada
@@ -58,7 +65,7 @@ public class App {
                     }
                     System.out.println("\n");  
                     }
-            
+                      
         }
                    
   
