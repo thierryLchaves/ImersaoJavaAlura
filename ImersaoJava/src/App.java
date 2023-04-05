@@ -23,7 +23,7 @@ public class App {
         List<Map<String, String>> ListaDeFilme = parser.parse(body);
        
         
-        var diretorio = new File("saida/");
+        var diretorio = new File("figurinha/");
         diretorio.mkdir();
         
         //Exibir e manipular os dados conforme desejado. 
@@ -33,24 +33,36 @@ public class App {
             var filme = ListaDeFilme.get(index);
 
             String urlImagem = filme.get("image");
+            String urlImagemMaior = urlImagem.replaceFirst("(@?\\.)([0-9A-Z,_]+).jpg$","$1.jppg");
             String titulo = filme.get("title");
 
-            InputStream inputStream = new URL(urlImagem).openStream();
-            String nomeArquivo = diretorio+titulo+".png";
+            InputStream inputStream = new URL(urlImagemMaior).openStream();
+            String nomeArquivo = "figurinha/"+titulo+".png";
 
+            
+            double classificacao = Double.parseDouble(filme.get("imDbRating"));
+            int numeroDeEstrelas = (int) classificacao;
+            String textoFigurinha;
 
-            geradora.cria(inputStream, nomeArquivo);
+            if (numeroDeEstrelas>=8.0) {
+            textoFigurinha = "Shoow";
+                
+            } else {
+                textoFigurinha = "HMMMMMMM....";
+                
+            }
+
+            //imprimir o numero conforme classificação
+            geradora.cria(inputStream, nomeArquivo,textoFigurinha);
 
             //impressão de dados com decoração \u001b declaração inicial [1m valor ou conjução desejada
             System.out.println("\u001b[1m"+titulo+"u001b[m");
             
-            double classificacao = Double.parseDouble(filme.get("imDbRating"));
-            int numeroDeEstrelas = (int) classificacao;
-                    //imprimir o numero conforme classificação
+           
                     if (numeroDeEstrelas >8 && numeroDeEstrelas<=10){ 
                         //imprimir a quantidade de estrelas conforme a classificação de acordo com imDbRatting
                         for (int n = 1; n <= numeroDeEstrelas; n++) {
-                            System.out.print("⭐");              
+                            System.out.print("♥☺");              
                         }
                         //condição de corte 2 se maior ou igual 5 ou menor igual a 8
                     } else if(numeroDeEstrelas >=5 && numeroDeEstrelas <=8){
@@ -66,7 +78,7 @@ public class App {
                     System.out.println("\n");  
                     }
                       
-        }
+    }
                    
   
     } 
